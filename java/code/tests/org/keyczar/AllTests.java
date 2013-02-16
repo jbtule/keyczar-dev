@@ -33,6 +33,8 @@ public class AllTests extends TestSuite {
     TestSuite suite = new TestSuite();
     suite.addTestSuite(CrypterTest.class);
     suite.addTestSuite(SignerTest.class);
+    suite.addTestSuite(BadHashTest.class);
+    suite.addTestSuite(CollisionTest.class);
     suite.addTestSuite(TimeoutSignerTest.class);
     suite.addTestSuite(UriSignerTest.class);
     suite.addTestSuite(KeyczarToolTest.class);
