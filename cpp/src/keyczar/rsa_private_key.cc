@@ -29,7 +29,7 @@ RSAPrivateKey* RSAPrivateKey::CreateFromValue(const Value& root_key) {
   const DictionaryValue* private_key = static_cast<const DictionaryValue*>(
       &root_key);
 
-  RSAImpl::RSAIntermediateKey intermediate_key;
+  RSAIntermediateKey intermediate_key;
 
   if (!util::SafeDeserializeString(*private_key, "privateExponent",
                                    &intermediate_key.d))
@@ -59,14 +59,10 @@ RSAPrivateKey* RSAPrivateKey::CreateFromValue(const Value& root_key) {
   if (public_key == NULL)
     return NULL;
 
-  if (!util::DeserializeString(*public_key, "modulus", &intermediate_key.n))
-    return NULL;
-  if (!util::DeserializeString(*public_key, "publicExponent",
-                               &intermediate_key.e))
-    return NULL;
+  RSAPublicKey* rsa_public_key = RSAPublicKey::CreateFromValue(
+      *public_key, &intermediate_key);
 
-  int size_public;
-  if (!public_key->GetInteger("size", &size_public))
+  if (rsa_public_key == NULL)
     return NULL;
 
   scoped_ptr<RSAImpl> rsa_private_key_impl(
@@ -75,18 +71,8 @@ RSAPrivateKey* RSAPrivateKey::CreateFromValue(const Value& root_key) {
     return NULL;
 
   // Check the provided size is valid.
-  if (size != size_public || size != rsa_private_key_impl->Size() ||
+  if (size != rsa_private_key_impl->Size() ||
       !KeyType::IsValidCipherSize(KeyType::RSA_PRIV, size))
-    return NULL;
-
-  scoped_ptr<RSAImpl> rsa_public_key_impl(
-      CryptoFactory::CreatePublicRSA(intermediate_key));
-  if (rsa_public_key_impl.get() == NULL)
-    return NULL;
-
-  RSAPublicKey* rsa_public_key = new RSAPublicKey(rsa_public_key_impl.release(),
-                                                  size);
-  if (rsa_public_key == NULL)
     return NULL;
 
   return new RSAPrivateKey(rsa_private_key_impl.release(),
@@ -95,16 +81,16 @@ RSAPrivateKey* RSAPrivateKey::CreateFromValue(const Value& root_key) {
 }
 
 // static
-RSAPrivateKey* RSAPrivateKey::GenerateKey(int size) {
+RSAPrivateKey* RSAPrivateKey::GenerateKey(int size, RsaPadding padding) {
   if (!KeyType::IsValidCipherSize(KeyType::RSA_PRIV, size))
     return NULL;
 
   scoped_ptr<RSAImpl> rsa_private_key_impl(
-      CryptoFactory::GeneratePrivateRSA(size));
+      CryptoFactory::GeneratePrivateRSA(size, padding));
   if (rsa_private_key_impl.get() == NULL)
     return NULL;
 
-  RSAImpl::RSAIntermediateKey intermediate_public_key;
+  RSAIntermediateKey intermediate_public_key;
   if (!rsa_private_key_impl->GetPublicAttributes(&intermediate_public_key))
      return NULL;
 
@@ -125,9 +111,12 @@ RSAPrivateKey* RSAPrivateKey::GenerateKey(int size) {
 
 // static
 RSAPrivateKey* RSAPrivateKey::CreateFromPEMPrivateKey(
-    const std::string& filename, const std::string* passphrase) {
+    const std::string& filename,
+    const std::string* passphrase,
+    RsaPadding padding) {
   scoped_ptr<RSAImpl> rsa_private_key_impl(
-      CryptoFactory::CreatePrivateRSAFromPEMPrivateKey(filename, passphrase));
+      CryptoFactory::CreatePrivateRSAFromPEMPrivateKey(
+          filename, passphrase, padding));
   if (rsa_private_key_impl.get() == NULL)
     return NULL;
 
@@ -135,7 +124,7 @@ RSAPrivateKey* RSAPrivateKey::CreateFromPEMPrivateKey(
   if (!KeyType::IsValidCipherSize(KeyType::RSA_PRIV, size))
     return NULL;
 
-  RSAImpl::RSAIntermediateKey intermediate_public_key;
+  RSAIntermediateKey intermediate_public_key;
   if (!rsa_private_key_impl->GetPublicAttributes(&intermediate_public_key))
      return NULL;
 
@@ -159,7 +148,7 @@ Value* RSAPrivateKey::GetValue() const {
   if (private_key.get() == NULL)
     return NULL;
 
-  RSAImpl::RSAIntermediateKey intermediate_key;
+  RSAIntermediateKey intermediate_key;
   if (!rsa_impl()->GetAttributes(&intermediate_key))
     return NULL;
 
@@ -226,6 +215,14 @@ bool RSAPrivateKey::Decrypt(const std::string& ciphertext,
 
   return rsa_impl()->Decrypt(ciphertext.substr(Key::GetHeaderSize()),
                              plaintext);
+}
+
+RsaPadding RSAPrivateKey::padding() const {
+  return rsa_impl()->padding();
+}
+
+void RSAPrivateKey::set_padding(RsaPadding padding) {
+  rsa_impl()->set_padding(padding);
 }
 
 }  // namespace keyczar
