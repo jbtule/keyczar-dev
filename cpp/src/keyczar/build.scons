@@ -361,6 +361,7 @@ keyczar_unittests = [
     'rsa_key_unittest.cc',
     'run_all_unittests.cc',
     'session_unittest.cc',
+    'special_unittest.cc',
     ]
 
 openssl_unittests = [
