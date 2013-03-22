@@ -25,12 +25,12 @@
 namespace keyczar {
 
 
-  std::string InteropTest::LangDir() const{
-      return GetParam() + "_data";
-  }
+std::string InteropTest::LangDir() const {
+    return GetParam() + "_data";
+}
 
 
-  void InteropTest::TestVerify(
+void InteropTest::TestVerify(
                        const std::string& sig_data,
                        const std::string& verify_key, 
                        const std::string& filename) const {
@@ -48,8 +48,7 @@ void InteropTest::TestAttachedVerify(
                           const std::string& sig_data,
                           const std::string& verify_key,
                           const std::string& hidden_value,
-                          const std::string& filename) const{
-
+                          const std::string& filename) const {
   std::string signature;
   const FilePath verify_path = data_path_.Append(LangDir()).Append(sig_data);
   std::string full_filename = filename;
@@ -67,12 +66,10 @@ void InteropTest::TestAttachedVerify(
   EXPECT_EQ(input_data_, signed_data);
 }
 
-
 void InteropTest::TestVerifyUnversioned(
                              const std::string& sig_data,
                              const std::string& verify_key,
-                             const std::string& filename) const{
-
+                             const std::string& filename) const {
   std::string signature;
   const FilePath verify_path = data_path_.Append(LangDir()).Append(sig_data);
 
@@ -83,12 +80,9 @@ void InteropTest::TestVerifyUnversioned(
   EXPECT_TRUE(verifier->Verify(input_data_, signature));
 }
 
-
-
 void InteropTest::TestDecrypt(
                         const std::string& decrypt_key,
-                        const std::string&  filename) const{
-
+                        const std::string&  filename) const {
   FilePath keyset_path = data_path_.Append(LangDir()).Append(decrypt_key);
   scoped_ptr<Crypter> crypter(Crypter::Read(keyset_path.value()));
 
@@ -102,13 +96,12 @@ void InteropTest::TestDecrypt(
 
   // Compares clear texts
   EXPECT_EQ(decrypted_data, input_data_);
-
 }
 
 void InteropTest::TestDecryptWithCrypter(
                               const std::string& decrypt_key,
                               const std::string& crypter_key,
-                              const std::string& filename) const{
+                              const std::string& filename) const {
 
   const FilePath aes_path = data_path_.Append(LangDir()).Append(crypter_key);
   scoped_ptr<Crypter> decrypter(Crypter::Read(aes_path.value()));
@@ -131,27 +124,26 @@ void InteropTest::TestDecryptWithCrypter(
 
 void InteropTest::TestSignedSessionDecrypt(const std::string& decrypt_key,
                                 const std::string& verify_key,
-                                const std::string& filename) const{
+                                const std::string& filename) const {
+  FilePath decrypt_path = data_path_.Append(LangDir()).Append(decrypt_key);
+  FilePath verify_path = data_path_.Append(LangDir()).Append(verify_key);
 
-    FilePath decrypt_path = data_path_.Append(LangDir()).Append(decrypt_key);
-    FilePath verify_path = data_path_.Append(LangDir()).Append(verify_key);
 
+  std::string session_material;
+  std::string ciphertext;
+  std::string plaintext;
+  ReadDataFile(decrypt_key, filename + ".signedsession.material", &session_material);
+  ReadDataFile(decrypt_key, filename + ".signedsession.ciphertext", &ciphertext);
 
-    std::string session_material;
-    std::string ciphertext;
-    std::string plaintext;
-    ReadDataFile(decrypt_key, filename + ".signedsession.material", &session_material);
-    ReadDataFile(decrypt_key, filename + ".signedsession.ciphertext", &ciphertext);
+  scoped_ptr<SignedSessionDecrypter> decrypter(SignedSessionDecrypter::NewSessionDecrypter(
+      Crypter::Read(decrypt_path), Verifier::Read(verify_path), session_material));
 
-    scoped_ptr<SignedSessionDecrypter> decrypter(SignedSessionDecrypter::NewSessionDecrypter(
-        Crypter::Read(decrypt_path), Verifier::Read(verify_path), session_material));
-    
-    ASSERT_TRUE(decrypter.get());
+  ASSERT_TRUE(decrypter.get());
 
-    EXPECT_TRUE(decrypter->SessionDecrypt(ciphertext, &plaintext));
+  EXPECT_TRUE(decrypter->SessionDecrypt(ciphertext, &plaintext));
 
-    // Compares clear texts
-    EXPECT_EQ(plaintext, input_data_);
+  // Compares clear texts
+  EXPECT_EQ(plaintext, input_data_);
 }
 
 

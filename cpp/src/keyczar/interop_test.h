@@ -28,35 +28,29 @@
 
 namespace keyczar {
 
-class InteropTest : public ::testing::TestWithParam< std::string> {
- protected:
-  virtual void SetUp() {
-    PlatformTest::SetUp();
+class InteropTest : public ::testing::TestWithParam<std::string> {
+  protected:
+    virtual void SetUp() {
+      base_test::PathService::Get(base_test::DIR_SOURCE_ROOT, &data_path_);
+      data_path_ = data_path_.Append("keyczar");
+      data_path_ = data_path_.Append("data");
+      data_path_ = data_path_.Append("interop-data");
 
-    base_test::PathService::Get(base_test::DIR_SOURCE_ROOT, &data_path_);
-    data_path_ = data_path_.Append("keyczar");
-    data_path_ = data_path_.Append("data");
-    data_path_ = data_path_.Append("interop-data");
-
-    input_data_ = "This is some test data";
+      input_data_ = "This is some test data";
   }
 
   virtual void TearDown() {
-    PlatformTest::TearDown();
   }
 
-  // Paths used in testing.
   FilePath data_path_;
   std::string input_data_;
-
-  // Common test routines
 
   std::string LangDir() const;
 
   void TestVerify(
-                       const std::string& sig_data,
-                       const std::string& verify_key, 
-                       const std::string& filename) const;
+                  const std::string& sig_data,
+                  const std::string& verify_key, 
+                  const std::string& filename) const;
 
   void TestAttachedVerify(
                           const std::string& sig_data,
@@ -70,8 +64,8 @@ class InteropTest : public ::testing::TestWithParam< std::string> {
                              const std::string& filename) const;
 
   void TestDecrypt(
-                        const std::string& decrypt_key,
-                        const std::string&  filename) const;
+                   const std::string& decrypt_key,
+                   const std::string&  filename) const;
   
   void TestDecryptWithCrypter(
                               const std::string& decrypt_key,
@@ -79,12 +73,11 @@ class InteropTest : public ::testing::TestWithParam< std::string> {
                               const std::string& filename) const;
 
 
-  void TestSignedSessionDecrypt(const std::string& decrypt_key,
+  void TestSignedSessionDecrypt(
+                                const std::string& decrypt_key,
                                 const std::string& verify_key,
                                 const std::string& filename) const;
 
-
-  // Utility methods
   void ReadDataFile(const std::string& dir, const std::string& filename, std::string* content) const;
 };
 
