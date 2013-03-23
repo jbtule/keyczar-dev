@@ -32,7 +32,7 @@ std::string InteropTest::LangDir() const {
 
 void InteropTest::TestVerify(
                        const std::string& sig_data,
-                       const std::string& verify_key, 
+                       const std::string& verify_key,
                        const std::string& filename) const {
   std::string signature;
   const FilePath verify_path = data_path_.Append(LangDir()).Append(sig_data);
@@ -52,7 +52,7 @@ void InteropTest::TestAttachedVerify(
   std::string signature;
   const FilePath verify_path = data_path_.Append(LangDir()).Append(sig_data);
   std::string full_filename = filename;
-  if (hidden_value != ""){
+  if (hidden_value != "") {
     full_filename += ".";
   }
   full_filename += hidden_value;
@@ -75,7 +75,8 @@ void InteropTest::TestVerifyUnversioned(
 
   ReadDataFile(sig_data, filename + ".unversioned", &signature);
 
-  scoped_ptr<UnversionedVerifier> verifier(UnversionedVerifier::Read(verify_path.value()));
+  scoped_ptr<UnversionedVerifier> verifier(
+    UnversionedVerifier::Read(verify_path.value()));
   ASSERT_TRUE(verifier.get());
   EXPECT_TRUE(verifier->Verify(input_data_, signature));
 }
@@ -102,12 +103,12 @@ void InteropTest::TestDecryptWithCrypter(
                               const std::string& decrypt_key,
                               const std::string& crypter_key,
                               const std::string& filename) const {
-
   const FilePath aes_path = data_path_.Append(LangDir()).Append(crypter_key);
   scoped_ptr<Crypter> decrypter(Crypter::Read(aes_path.value()));
   ASSERT_TRUE(decrypter.get());
 
-  const FilePath aes_crypted_path = data_path_.Append(LangDir()).Append(decrypt_key);
+  const FilePath aes_crypted_path = data_path_.Append(LangDir())
+      .Append(decrypt_key);
   rw::KeysetEncryptedJSONFileReader encrypted_reader(aes_crypted_path.value(),
                                                      decrypter.release());
 
@@ -128,15 +129,18 @@ void InteropTest::TestSignedSessionDecrypt(const std::string& decrypt_key,
   FilePath decrypt_path = data_path_.Append(LangDir()).Append(decrypt_key);
   FilePath verify_path = data_path_.Append(LangDir()).Append(verify_key);
 
-
   std::string session_material;
   std::string ciphertext;
   std::string plaintext;
-  ReadDataFile(decrypt_key, filename + ".signedsession.material", &session_material);
-  ReadDataFile(decrypt_key, filename + ".signedsession.ciphertext", &ciphertext);
+  ReadDataFile(decrypt_key, filename + ".signedsession.material",
+               &session_material);
+  ReadDataFile(decrypt_key, filename + ".signedsession.ciphertext",
+               &ciphertext);
 
-  scoped_ptr<SignedSessionDecrypter> decrypter(SignedSessionDecrypter::NewSessionDecrypter(
-      Crypter::Read(decrypt_path), Verifier::Read(verify_path), session_material));
+  scoped_ptr<SignedSessionDecrypter> decrypter(
+      SignedSessionDecrypter::NewSessionDecrypter(
+        Crypter::Read(decrypt_path), Verifier::Read(verify_path),
+          session_material));
 
   ASSERT_TRUE(decrypter.get());
 
@@ -152,7 +156,8 @@ void InteropTest::ReadDataFile(const std::string& dir,
                                std::string* content) const {
   ASSERT_TRUE(content != NULL);
 
-  const FilePath path = data_path_.Append(LangDir()).Append(dir).Append(filename);
+  const FilePath path = data_path_.Append(LangDir())
+      .Append(dir).Append(filename);
   std::ifstream input_file(path.value().c_str());
   ASSERT_TRUE(input_file);
 

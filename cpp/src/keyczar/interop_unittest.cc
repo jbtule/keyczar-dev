@@ -200,4 +200,4 @@ TEST_P(InteropTest, VerifyUnversionedPublicRsa) {
   TestVerifyUnversioned("rsa-sign", "rsa-sign.public", "2");
 }
 
-}
+}  // namespace keyczar

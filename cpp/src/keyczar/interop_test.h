@@ -16,10 +16,10 @@
 
 #ifndef KEYCZAR_INTEROP_TEST_H_
 #define KEYCZAR_INTEROP_TEST_H_
+
 #include <string>
 
 #include <testing/gtest/include/gtest/gtest.h>
-#include <testing/platform_test.h>
 
 #include <keyczar/base/file_path.h>
 #include <keyczar/base/file_util.h>
@@ -49,7 +49,7 @@ class InteropTest : public ::testing::TestWithParam<std::string> {
 
   void TestVerify(
                   const std::string& sig_data,
-                  const std::string& verify_key, 
+                  const std::string& verify_key,
                   const std::string& filename) const;
 
   void TestAttachedVerify(
@@ -66,7 +66,7 @@ class InteropTest : public ::testing::TestWithParam<std::string> {
   void TestDecrypt(
                    const std::string& decrypt_key,
                    const std::string&  filename) const;
-  
+
   void TestDecryptWithCrypter(
                               const std::string& decrypt_key,
                               const std::string& crypter_key,
@@ -78,7 +78,9 @@ class InteropTest : public ::testing::TestWithParam<std::string> {
                                 const std::string& verify_key,
                                 const std::string& filename) const;
 
-  void ReadDataFile(const std::string& dir, const std::string& filename, std::string* content) const;
+  void ReadDataFile(const std::string& dir,
+                    const std::string& filename, 
+                    std::string* content) const;
 };
 
 }  // namespace keyczar
