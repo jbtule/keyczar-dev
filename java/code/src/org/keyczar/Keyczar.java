@@ -116,7 +116,7 @@ public abstract class Keyczar {
     }
   }
   
-  private void addKeyHashMap(byte[] hash, KeyczarKey key){
+  private void addKeyHashMap(byte[] hash, KeyczarKey key) {
      KeyHash kHash = new KeyHash(hash);
     if (hashMap.get(kHash) == null) {
       hashMap.put(kHash, new ArrayList<KeyczarKey>());

@@ -286,7 +286,7 @@ page at http://checkstyle.sourceforge.net/config.html -->
         LITERAL_FINALLY, LITERAL_FOR, LITERAL_IF, LITERAL_RETURN,
         LITERAL_SYNCHRONIZED, LITERAL_TRY, LITERAL_WHILE, LOR, LT, MINUS,
         MINUS_ASSIGN, MOD, MOD_ASSIGN, NOT_EQUAL, PLUS, PLUS_ASSIGN, QUESTION,
-        SL, SL_ASSIGN, SR_ASSIGN, STAR, STAR_ASSIGN"/>
+        SL, SL_ASSIGN, SR_ASSIGN, STAR, STAR_ASSIGN, RCURLY, LCURLY"/>
       <property name="severity" value="error"/>
     </module>
 

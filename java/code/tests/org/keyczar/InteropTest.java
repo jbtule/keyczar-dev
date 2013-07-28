@@ -47,7 +47,7 @@ public abstract class InteropTest extends TestCase {
     testDecrypt(new KeyczarFileReader(testData(subDir)), subDir);
   }
   
-  private String testData(String subDir){
+  private String testData(String subDir) {
 	  return TEST_DATA + "/"+ platform + "_data" + subDir;
   }
 
@@ -304,14 +304,14 @@ public abstract class InteropTest extends TestCase {
 		  testSignedSessionDecrypt("/rsa", "/dsa.public");
 	  }
 	  
-	  public class EarlyClock implements Clock{
-		  public long now(){
+	  public class EarlyClock implements Clock {
+		  public long now() {
 			  return 1356087960000L;
 		  }
 	  }
 	  
-	  public class LateClock implements Clock{
-		  public long now(){
+	  public class LateClock implements Clock {
+		  public long now() {
 			  return 1356088560000L;
 		  }
 	  }

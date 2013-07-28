@@ -136,7 +136,7 @@ public class Verifier extends Keyczar {
         if (rawVerify(key, data, hidden, signature)) {
            return true;
         }
-      } catch (Exception e){
+      } catch (Exception e) {
         LOG.debug(e.getMessage(), e);
       }
       data.reset();
@@ -171,12 +171,12 @@ public class Verifier extends Keyczar {
    * perform a verification, assume all key and hash checks have been performed.
    */
   boolean rawVerify(KeyczarKey key, final ByteBuffer data, final ByteBuffer hidden,
-      final ByteBuffer signature) throws KeyczarException{
+      final ByteBuffer signature) throws KeyczarException {
     VerifyingStream stream = (VerifyingStream) key.getStream();
     stream.initVerify();
     stream.updateVerify(data);
     if (hidden != null) {
-    stream.updateVerify(hidden);
+      stream.updateVerify(hidden);
     }
 
     // The signed data is terminated with the current Keyczar format 
@@ -227,10 +227,10 @@ public class Verifier extends Keyczar {
         if (rawVerify(key,
                      ByteBuffer.wrap(blob),
                      ByteBuffer.wrap(hiddenPlusLength),
-                     ByteBuffer.wrap(signature))){
+                     ByteBuffer.wrap(signature))) {
           return true;
         }
-      } catch (Exception e){
+      } catch (Exception e) {
         LOG.debug(e.getMessage(), e);
       }
     }

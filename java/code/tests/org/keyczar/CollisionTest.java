@@ -20,7 +20,7 @@ public class CollisionTest extends TestCase {
 		    testDecrypt(new KeyczarFileReader(testData(subDir)), subDir);
 	  }
 	  
-	  private String testData(String subDir){
+	  private String testData(String subDir) {
 		  return TEST_DATA + subDir;
 	  }
 
@@ -78,14 +78,14 @@ public class CollisionTest extends TestCase {
 		    		hidden.getBytes(Keyczar.DEFAULT_ENCODING)));
 	  }
 	  
-	  public class EarlyClock implements Clock{
-		  public long now(){
+	  public class EarlyClock implements Clock {
+		  public long now() {
 			  return 1356087960000L;
 		  }
 	  }
 	  
-	  public class LateClock implements Clock{
-		  public long now(){
+	  public class LateClock implements Clock {
+		  public long now() {
 			  return 1356088560000L;
 		  }
 	  }
