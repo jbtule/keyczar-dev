@@ -34,7 +34,7 @@ import org.keyczar.util.Clock;
  * @author steveweis@gmail.com (Steve Weis)
  */
 public class TimeoutSignerTest extends TestCase {
-  private static final String TEST_DATA = "./testdata";
+  private static final String TEST_DATA = "./test-data/existing-data/java";
   private String input = "This is some test data";
   private Clock mockClock;
   

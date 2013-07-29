@@ -13,7 +13,7 @@ import junit.framework.TestCase;
 
 public class CollisionTest extends TestCase {
 	  private static final Logger LOG = Logger.getLogger(CollisionTest.class);
-	  private static final String TEST_DATA = "./testdata/key-collision";
+	  private static final String TEST_DATA = "./test-data/special-case/key-collision";
 	  private String input = "This is some test data";
 	  
 	  private final void testDecrypt(String subDir) throws Exception {

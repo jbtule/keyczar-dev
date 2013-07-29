@@ -39,7 +39,7 @@ import org.keyczar.util.Clock;
 
 public abstract class InteropTest extends TestCase {
   private static final Logger LOG = Logger.getLogger(InteropTest.class);
-  private static final String TEST_DATA = "./interop-data";
+  private static final String TEST_DATA = "./test-data/interop-data";
   private String input = "This is some test data";
   protected String platform;
   

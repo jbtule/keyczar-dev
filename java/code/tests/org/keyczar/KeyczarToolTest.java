@@ -50,7 +50,7 @@ public class KeyczarToolTest extends TestCase {
     }
   }
 
-  private static final String TEST_DATA = "./testdata/certificates/";
+  private static final String TEST_DATA = "./test-data/existing-data/java/certificates/";
 
   MockKeyczarReader mock;
   MockKeyczarReader pubMock;
@@ -285,7 +285,7 @@ public class KeyczarToolTest extends TestCase {
   public final void testUseKey() {
     try {
       KeyczarTool.setReader(null); // use real reader
-      String testKeyPath = "./testdata/aes";
+      String testKeyPath = "./test-data/existing-data/java/aes";
       // TODO(mtomczak): Choose a safer location for this scratch file.
       String testOutputPath = "/tmp/keyczar_test_output";
       String testOutputPath2 = "/tmp/keyczar_test_output_2";

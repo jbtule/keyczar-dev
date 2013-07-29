@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 
 public class BadHashTest extends TestCase {
 	  private static final Logger LOG = Logger.getLogger(BadHashTest.class);
-	  private static final String TEST_DATA = "./testdata/badhash";
+	  private static final String TEST_DATA = "./test-data/special-case/badhash";
 	  private String input = "This is some test data";
 	  
 	  private final void testDecrypt(String subDir) throws Exception {
