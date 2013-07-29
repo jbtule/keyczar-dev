@@ -41,7 +41,7 @@ public class KeyczarToolTest extends TestCase {
   private final static class FastRsaKeyParameters implements RsaKeyParameters {
     @Override
     public int getKeySize() {
-      return 512; // use 512-bit keys for speed
+      return 1024; // use 1024-bit keys for speed
     }
 
     @Override
@@ -94,6 +94,7 @@ public class KeyczarToolTest extends TestCase {
   public final void testAddKeySizeFlag() {
     String[] args = {"addkey", "--status=active", "--size=192"};
     KeyczarTool.main(args);
+    assertTrue(mock.existsVersion(100));
     assertEquals(192, mock.getKeySize(100)); // adding fourth key
   }
 
@@ -219,13 +220,11 @@ public class KeyczarToolTest extends TestCase {
     String[] args = {"importkey",
                      "--pemfile=" + TEST_DATA + "rsa-crypt-pkcs8.pem",
                      "--passphrase=pass"};
-
     assertEquals(3, mock.numKeys());
     KeyczarTool.main(args);
     assertEquals(4, mock.numKeys());
     assertTrue(mock.existsVersion(100));
-    assertTrue("Should contain a private key", 
-               mock.getKey(100).contains("primeP"));
+    assertTrue("Should contain a private key", mock.getKey(100).contains("primeP"));
   }
 
   @Test
