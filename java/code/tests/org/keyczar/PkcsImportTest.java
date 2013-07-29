@@ -36,7 +36,7 @@ import org.keyczar.util.Base64Coder;
  * @author swillden@google.com (Shawn Willden)
  */
 public class PkcsImportTest extends TestCase {
-  private static final String TEST_DATA = "./testdata/certificates/";
+  private static final String TEST_DATA = "./test-data/existing-data/java/certificates/";
   private static final String[] FILE_FORMATS = { "pem", "der" };
   private static final String[] KEY_TYPES = { "rsa", "dsa" };
   private static final String INPUT = "This is some test data";

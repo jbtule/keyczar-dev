@@ -24,7 +24,7 @@ import org.keyczar.exceptions.KeyczarException;
 public class SymmetricPerformanceTest {
   enum Tests { HMAC, AES }
   
-  private static final String TEST_DATA = "./testdata";
+  private static final String TEST_DATA = "./test-data/existing-data/java";
   static final int NUM_THREADS = 3;
   static final int NUM_ITERATIONS = 30000;
   static volatile boolean caughtException;

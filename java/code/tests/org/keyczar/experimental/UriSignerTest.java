@@ -41,7 +41,7 @@ public class UriSignerTest extends TestCase {
   
   @Override
   public final void setUp() throws KeyczarException {
-    uriSigner = new UriSigner("./testdata/hmac");
+    uriSigner = new UriSigner("./test-data/existing-data/java/hmac");
   }
   
   @Test

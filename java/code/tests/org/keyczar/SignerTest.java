@@ -37,7 +37,7 @@ import org.keyczar.exceptions.ShortSignatureException;
  */
 public class SignerTest extends TestCase {
   private static final Logger LOG = Logger.getLogger(SignerTest.class);
-  private static final String TEST_DATA = "./testdata";
+  private static final String TEST_DATA = "./test-data/existing-data/java";
   private String input = "This is some test data";
   private byte[] inputBytes = input.getBytes();
 

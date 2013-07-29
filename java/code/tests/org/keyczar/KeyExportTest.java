@@ -21,7 +21,7 @@ import org.keyczar.i18n.Messages;
 public class KeyExportTest extends TestCase {
   private static final String INVALID_PASSHRASE = "short";
   private static final String PASSPHRASE = "passphrase";
-  private static final String TEST_DATA = "./testdata/certificates/";
+  private static final String TEST_DATA = "./test-data/existing-data/java/certificates/";
 
   private void doTestImport(final String keyName, String expectedContent, String passphrase)
       throws KeyczarException {

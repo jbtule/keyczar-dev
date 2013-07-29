@@ -68,7 +68,7 @@ public class TimeoutSigner extends TimeoutVerifier {
    *
    * @param signer Signer to be used for timeout signatures
    */
-  public TimeoutSigner(Signer signer){
+  public TimeoutSigner(Signer signer) {
     this.signer = signer;
     setVerifier(this.signer);
   }

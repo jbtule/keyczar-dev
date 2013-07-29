@@ -38,7 +38,7 @@ import org.keyczar.interfaces.KeyczarReader;
 
 public class CrypterTest extends TestCase {
   private static final Logger LOG = Logger.getLogger(CrypterTest.class);
-  private static final String TEST_DATA = "./testdata";
+  private static final String TEST_DATA = "./test-data/existing-data/java";
   private String input = "This is some test data";
   
   private final void testDecrypt(String subDir) throws Exception {

@@ -37,7 +37,7 @@ import org.keyczar.util.Base64Coder;
 @Experimental
 public class SignedSessionTest extends TestCase {
   private static final Logger LOG = Logger.getLogger(SignedSessionTest.class);
-  private static final String TEST_DATA = "./testdata";
+  private static final String TEST_DATA = "./test-data/existing-data/java";
   private String input = "This is some test data";
   // Bigger than a public key block
   private byte[] bigInput = new byte[10000];

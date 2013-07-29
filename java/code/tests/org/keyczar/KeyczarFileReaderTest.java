@@ -28,7 +28,7 @@ import org.keyczar.interfaces.KeyczarReader;
  */
 
 public class KeyczarFileReaderTest extends TestCase {
-  private static final String TEST_DATA = "./testdata";
+  private static final String TEST_DATA = "./test-data/existing-data/java";
 
   public void testGetPrimary() throws Exception {
 	// based on the checked in files, we know version 2 is primary.

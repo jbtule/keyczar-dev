@@ -33,7 +33,7 @@ import com.google.gson.JsonParseException;
  * @author swillden@google.com (Shawn Willden)
  */
 public class RsaPaddingTest extends TestCase {
-  private static final String TEST_DATA = "./testdata";
+  private static final String TEST_DATA = "./test-data/existing-data/java";
   private KeyczarReader defaultReader;
   private KeyczarReader oaepReader;
   private KeyczarReader pkcsReader;

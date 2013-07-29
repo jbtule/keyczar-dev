@@ -31,7 +31,7 @@ import org.junit.Test;
  */
 
 public class CrossCompatibilityTest extends TestCase {
-  private static final String TEST_DATA = "./testdata/crosscomp";
+  private static final String TEST_DATA = "./test-data/existing-data/java/crosscomp";
   private String plaintext = "This is not a test, this is a real string";
   private String morePlaintext = "Some text to encrypt";
   
