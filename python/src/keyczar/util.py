@@ -173,7 +173,7 @@ def ParseX509(x509):
     raise errors.KeyczarError("Illegal X.509 String.")
   [oid, alg_params] = ParseASN1Sequence(seq[0])
   pubkey = decoder.decode(univ.OctetString(BinToBytes(seq[1].
-                                                      prettyPrint()[1:-2])))[0]
+                                                      prettyPrint()[2:-3])))[0]
   # Component 1 should be a BIT STRING, get raw bits by discarding extra chars,
   # then convert to OCTET STRING which can be ASN.1 decoded
   params = {}
@@ -402,7 +402,7 @@ def PackByteArray(array):
   Packs the given array into a structure composed of a four-byte, big-endian
   integer containing the array length, followed by the array contents.
   """
-  if not array:
+  if array is None:
     return ''
   array_length_header = struct.pack(BIG_ENDIAN_INT_SPECIFIER, len(array))
   return array_length_header + array
