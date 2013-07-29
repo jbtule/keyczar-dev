@@ -33,7 +33,7 @@ class InteropTest : public ::testing::TestWithParam<std::string> {
     virtual void SetUp() {
       base_test::PathService::Get(base_test::DIR_SOURCE_ROOT, &data_path_);
       data_path_ = data_path_.Append("keyczar");
-      data_path_ = data_path_.Append("data");
+      data_path_ = data_path_.Append("test-data");
       data_path_ = data_path_.Append("interop-data");
 
       input_data_ = "This is some test data";

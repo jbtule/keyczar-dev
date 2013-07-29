@@ -35,7 +35,7 @@ class KeyczarTest : public PlatformTest {
 
     base_test::PathService::Get(base_test::DIR_SOURCE_ROOT, &data_path_);
     data_path_ = data_path_.Append("keyczar");
-    data_path_ = data_path_.Append("data");
+    data_path_ = data_path_.Append("test-data");
     data_path_ = data_path_.Append("existing-data");
 #ifdef COMPAT_KEYCZAR_06B
     data_path_ = data_path_.Append("cpp");
