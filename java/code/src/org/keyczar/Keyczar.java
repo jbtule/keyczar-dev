@@ -103,23 +103,22 @@ public abstract class Keyczar {
       KeyczarKey key = kmd.getType().getBuilder().read(keyString);
       LOG.debug(Messages.getString("Keyczar.ReadVersion", version));
     
-    
       //Add hash  
       addKeyHashMap(key.hash(), key);
       
       //Add fall back hash(es)
-      for(byte[] h : key.fallbackHash()){
-    	  addKeyHashMap(h, key);
+      for (byte[] h : key.fallbackHash()) {
+        addKeyHashMap(h, key);
       }
       
       versionMap.put(version, key);
     }
   }
   
-  private void addKeyHashMap(byte[] hash, KeyczarKey key){
-     KeyHash kHash =new KeyHash(hash);
-     if(hashMap.get(kHash) ==null){
-    	hashMap.put(kHash, new ArrayList<KeyczarKey>());
+  private void addKeyHashMap(byte[] hash, KeyczarKey key) {
+     KeyHash kHash = new KeyHash(hash);
+     if (hashMap.get(kHash) == null) {
+       hashMap.put(kHash, new ArrayList<KeyczarKey>());
      }
      hashMap.get(kHash).add(key);
   }

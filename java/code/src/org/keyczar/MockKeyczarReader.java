@@ -42,9 +42,9 @@ public class MockKeyczarReader implements KeyczarReader {
 
   @Override
   public String getKey() throws KeyczarException {
-	KeyMetadata metadata = KeyMetadata.read(getMetadata());
+  KeyMetadata metadata = KeyMetadata.read(getMetadata());
 
-	return getKey(metadata.getPrimaryVersion().getVersionNumber());
+  return getKey(metadata.getPrimaryVersion().getVersionNumber());
   }
 
   @Override

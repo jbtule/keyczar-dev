@@ -88,7 +88,7 @@ public abstract class KeyczarKey {
     return Util.toInt(this.hash());
   }
   
-  protected Stream cachedStream =null;
+  protected Stream cachedStream = null;
   
   protected abstract Stream getStream() throws KeyczarException;
 
@@ -108,7 +108,7 @@ public abstract class KeyczarKey {
   
   
   protected Iterable<byte[]> fallbackHash() {
-	return fallbackHash;
+    return fallbackHash;
   }
 
   int size() {
@@ -203,7 +203,7 @@ public abstract class KeyczarKey {
     return true;
   }
 
-  abstract protected Key getJceKey();
+  protected abstract Key getJceKey();
 
   private String getPemType() {
     if (isSecret()) {
