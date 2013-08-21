@@ -103,7 +103,10 @@ public class RsaPrivateKey extends KeyczarKey implements KeyczarPrivateKey {
 
   @Override
   protected Stream getStream() throws KeyczarException {
-    return new RsaPrivateStream();
+    if (cachedStream == null) {
+      cachedStream = new RsaPrivateStream();
+    }
+    return cachedStream;
   }
 
   @Override

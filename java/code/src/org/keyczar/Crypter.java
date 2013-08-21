@@ -41,8 +41,6 @@ import java.nio.ByteBuffer;
 public class Crypter extends Encrypter {
   private static final int DECRYPT_CHUNK_SIZE = 1024;
   private static final Logger LOG = Logger.getLogger(Crypter.class);
-  private final StreamCache<DecryptingStream> CRYPT_CACHE
-    = new StreamCache<DecryptingStream>();
 
   /**
    * Initialize a new Crypter with a KeyczarReader. The corresponding key set
@@ -120,10 +118,7 @@ public class Crypter extends Encrypter {
     // The input to decrypt is now positioned at the start of the ciphertext
     inputCopy.mark();
 
-    DecryptingStream cryptStream = CRYPT_CACHE.get(key);
-    if (cryptStream == null) {
-      cryptStream = (DecryptingStream) key.getStream();
-    }
+    DecryptingStream cryptStream = (DecryptingStream) key.getStream();
 
     VerifyingStream verifyStream = cryptStream.getVerifyingStream();
     if (inputCopy.remaining() < verifyStream.digestSize()) {
@@ -166,7 +161,6 @@ public class Crypter extends Encrypter {
     inputCopy.reset();
     cryptStream.doFinalDecrypt(inputCopy, output);
     output.limit(output.position());
-    CRYPT_CACHE.put(key, cryptStream);
   }
 
   /**

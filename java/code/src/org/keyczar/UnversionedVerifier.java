@@ -45,8 +45,6 @@ import java.nio.ByteBuffer;
 public class UnversionedVerifier extends Keyczar {
   private static final Logger LOG =
     Logger.getLogger(UnversionedVerifier.class);
-  private static final StreamCache<VerifyingStream> VERIFY_CACHE
-    = new StreamCache<VerifyingStream>();
 
   /**
    * Initialize a new UnversionedVerifier with a KeyczarReader.
@@ -114,14 +112,10 @@ public class UnversionedVerifier extends Keyczar {
 
   private boolean verify(ByteBuffer data, ByteBuffer signature, KeyczarKey key)
       throws KeyczarException {
-    VerifyingStream stream = VERIFY_CACHE.get(key);
-    if (stream == null) {
-      stream = (VerifyingStream) key.getStream();
-    }
+    VerifyingStream stream = (VerifyingStream) key.getStream();
     stream.initVerify();
     stream.updateVerify(data.duplicate());
     boolean foundValidSignature = stream.verify(signature.duplicate());
-    VERIFY_CACHE.put(key, stream);
     return foundValidSignature;
   }
 
