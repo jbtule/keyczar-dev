@@ -102,6 +102,10 @@ public abstract class Keyczar {
       KeyczarKey key = kmd.getType().getBuilder().read(keyString);
       LOG.debug(Messages.getString("Keyczar.ReadVersion", version));
       addKeyHashMap(key.hash(), key);
+      //Add fall back hash(es)
+      for (byte[] h : key.fallbackHash()) {
+        addKeyHashMap(h, key);
+      }
       versionMap.put(version, key);
     }
   }
