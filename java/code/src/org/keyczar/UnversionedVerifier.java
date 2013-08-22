@@ -45,8 +45,6 @@ import java.nio.ByteBuffer;
 public class UnversionedVerifier extends Keyczar {
   private static final Logger LOG =
     Logger.getLogger(UnversionedVerifier.class);
-  private static final StreamCache<VerifyingStream> VERIFY_CACHE
-    = new StreamCache<VerifyingStream>();
 
   /**
    * Initialize a new UnversionedVerifier with a KeyczarReader.
@@ -98,10 +96,8 @@ public class UnversionedVerifier extends Keyczar {
    * @param data The data to verify the signature on
    * @param signature The signature to verify
    * @return Whether this is a valid signature
-   * @throws KeyczarException If the signature is malformed or a JCE error occurs.
    */
-  public boolean verify(ByteBuffer data, ByteBuffer signature)
-      throws KeyczarException {
+  public boolean verify(ByteBuffer data, ByteBuffer signature) {
     LOG.debug(Messages.getString("UnversionedVerifier.Verifying", data.remaining()));
 
     for (KeyczarKey key : versionMap.values()) {
@@ -112,17 +108,19 @@ public class UnversionedVerifier extends Keyczar {
     return false;
   }
 
-  private boolean verify(ByteBuffer data, ByteBuffer signature, KeyczarKey key)
-      throws KeyczarException {
-    VerifyingStream stream = VERIFY_CACHE.get(key);
-    if (stream == null) {
-      stream = (VerifyingStream) key.getStream();
+  private boolean verify(ByteBuffer data, ByteBuffer signature, KeyczarKey key) {
+    try {
+      VerifyingStream stream = (VerifyingStream) key.getStream();
+      stream.initVerify();
+      stream.updateVerify(data.duplicate());
+      return stream.verify(signature.duplicate());
+    } catch (KeyczarException e) {
+      LOG.debug(e.getMessage(), e);
+      return false;
+    } catch (RuntimeException e) {
+      LOG.debug(e.getMessage(), e);
+      return false;
     }
-    stream.initVerify();
-    stream.updateVerify(data.duplicate());
-    boolean foundValidSignature = stream.verify(signature.duplicate());
-    VERIFY_CACHE.put(key, stream);
-    return foundValidSignature;
   }
 
   /**

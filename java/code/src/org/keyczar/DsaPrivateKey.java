@@ -80,6 +80,11 @@ public class DsaPrivateKey extends KeyczarKey implements KeyczarPrivateKey {
   protected byte[] hash() {
     return getPublic().hash();
   }
+  
+  @Override
+  protected Iterable<byte[]> fallbackHash() {    
+    return getPublic().fallbackHash();
+  }
 
   public String getKeyGenAlgorithm() {
     return KEY_GEN_ALGORITHM;
@@ -92,7 +97,10 @@ public class DsaPrivateKey extends KeyczarKey implements KeyczarPrivateKey {
 
   @Override
   protected Stream getStream() throws KeyczarException {
-    return new DsaSigningStream();
+    if (cachedStream == null) {
+      cachedStream = new DsaSigningStream();
+    }
+    return cachedStream;
   }
 
   @Override
