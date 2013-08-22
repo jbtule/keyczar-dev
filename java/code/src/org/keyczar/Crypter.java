@@ -128,7 +128,7 @@ public class Crypter extends Encrypter {
       
       ByteBuffer tempBuffer = output;
       if (collision) {
-        tempBuffer = ByteBuffer.allocate(output.capacity());
+        tempBuffer = ByteBuffer.allocate(output.remaining());
       }
       
       DecryptingStream cryptStream = (DecryptingStream) key.getStream();

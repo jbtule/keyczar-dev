@@ -133,7 +133,7 @@ public class Verifier extends Keyczar {
     signature.mark();
     for (KeyczarKey key : keys) {
       try {
-        if (rawVerify(key,data, hidden, signature)) {
+        if (rawVerify(key, data, hidden, signature)) {
           return true;
         }
       } catch (KeyczarException e) {
@@ -230,9 +230,9 @@ public class Verifier extends Keyczar {
           return true;
         }
       } catch (KeyczarException e) {
-            LOG.debug(e.getMessage(), e);
+        LOG.debug(e.getMessage(), e);
       } catch (RuntimeException e) {
-            LOG.debug(e.getMessage(), e);
+        LOG.debug(e.getMessage(), e);
       } 
     }
     
