@@ -53,10 +53,10 @@ public class X509CertificateReader implements KeyczarReader {
       throws KeyczarException {
     if (purpose == null) {
       throw new KeyczarException("X509Certificate purpose must not be null");
-	}
-	if (certificateStream == null) {
-	  throw new KeyczarException("X509Certificate stream must not be null");
-	}
+    }
+    if (certificateStream == null) {
+      throw new KeyczarException("X509Certificate stream must not be null");
+    }
     this.purpose = purpose;
     this.certificateStream = certificateStream;
     this.padding = padding;
