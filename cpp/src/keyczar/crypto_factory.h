@@ -71,14 +71,14 @@ class CryptoFactory {
                             int iteration_count,
                             const std::string& password);
 
-  static RSAImpl* GeneratePrivateRSA(int size);
+  static RSAImpl* GeneratePrivateRSA(int size, RsaPadding padding);
 
-  static RSAImpl* CreatePrivateRSA(const RSAImpl::RSAIntermediateKey& key);
+  static RSAImpl* CreatePrivateRSA(const RSAIntermediateKey& key);
 
   static RSAImpl* CreatePrivateRSAFromPEMPrivateKey(
-      const std::string& filename, const std::string* passphrase);
+      const std::string& filename, const std::string* passphrase, RsaPadding padding);
 
-  static RSAImpl* CreatePublicRSA(const RSAImpl::RSAIntermediateKey& key);
+  static RSAImpl* CreatePublicRSA(const RSAIntermediateKey& key);
 
   static DSAImpl* GeneratePrivateDSA(int size);
 

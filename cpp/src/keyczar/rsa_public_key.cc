@@ -15,6 +15,7 @@
 
 #include <keyczar/base/base64w.h>
 #include <keyczar/base/logging.h>
+#include <keyczar/base/string_util.h>
 #include <keyczar/base/values.h>
 #include <keyczar/crypto_factory.h>
 #include <keyczar/key_type.h>
@@ -24,26 +25,38 @@
 namespace keyczar {
 
 // static
-RSAPublicKey* RSAPublicKey::CreateFromValue(const Value& root_key) {
+RSAPublicKey* RSAPublicKey::CreateFromValue(
+    const Value& root_key, RSAIntermediateKey* intermediate_key) {
   if (!root_key.IsType(Value::TYPE_DICTIONARY))
     return NULL;
   const DictionaryValue* public_key = static_cast<const DictionaryValue*>(
       &root_key);
 
-  RSAImpl::RSAIntermediateKey intermediate_key;
+  RSAIntermediateKey tmp;
+  if (intermediate_key == NULL) {
+    intermediate_key = &tmp;
+  }
 
-  if (!util::DeserializeString(*public_key, "modulus", &intermediate_key.n))
+  if (!util::DeserializeString(*public_key, "modulus", &intermediate_key->n))
     return NULL;
   if (!util::DeserializeString(*public_key, "publicExponent",
-                               &intermediate_key.e))
+                               &intermediate_key->e))
     return NULL;
 
   int size;
   if (!public_key->GetInteger("size", &size))
     return NULL;
 
+  std::string padding_string;
+  if (public_key->GetString("padding", &padding_string) &&
+      StringCompareInsensitive(padding_string, "pkcs") == 0) {
+    intermediate_key->padding = PKCS;
+  } else {
+    intermediate_key->padding = OAEP;
+  }
+
   scoped_ptr<RSAImpl> rsa_public_key_impl(
-      CryptoFactory::CreatePublicRSA(intermediate_key));
+      CryptoFactory::CreatePublicRSA(*intermediate_key));
   if (rsa_public_key_impl.get() == NULL)
     return NULL;
 
@@ -60,7 +73,7 @@ Value* RSAPublicKey::GetValue() const {
   if (public_key.get() == NULL)
     return NULL;
 
-  RSAImpl::RSAIntermediateKey intermediate_key;
+  RSAIntermediateKey intermediate_key;
   if (!rsa_impl()->GetPublicAttributes(&intermediate_key))
     return NULL;
 
@@ -80,7 +93,7 @@ bool RSAPublicKey::Hash(std::string* hash) const {
   if (hash == NULL)
     return false;
 
-  RSAImpl::RSAIntermediateKey key;
+  RSAIntermediateKey key;
   if (!rsa_impl()->GetPublicAttributes(&key))
     return false;
 
@@ -90,8 +103,9 @@ bool RSAPublicKey::Hash(std::string* hash) const {
     return false;
 
   digest_impl->Init();
-  AddToHash(key.n, *digest_impl);
-  AddToHash(key.e, *digest_impl);
+  bool strip_zeros = (key.padding == OAEP);
+  AddToHash(key.n, *digest_impl, strip_zeros);
+  AddToHash(key.e, *digest_impl, strip_zeros);
   std::string full_hash;
   digest_impl->Final(&full_hash);
   CHECK_LE(Key::GetHashSize(), static_cast<int>(full_hash.length()));
@@ -132,6 +146,14 @@ bool RSAPublicKey::Encrypt(const std::string& plaintext,
 
   ciphertext->assign(header + encrypted);
   return true;
+}
+
+RsaPadding RSAPublicKey::padding() const {
+  return rsa_impl()->padding();
+}
+
+void RSAPublicKey::set_padding(RsaPadding padding) {
+  rsa_impl()->set_padding(padding);
 }
 
 }  // namespace keyczar

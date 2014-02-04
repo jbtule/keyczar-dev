@@ -20,10 +20,12 @@
 #include <keyczar/base/scoped_ptr.h>
 #include <keyczar/base/values.h>
 #include <keyczar/public_key.h>
+#include <keyczar/rsa_padding.h>
 
 namespace keyczar {
 
 class RSAImpl;
+struct RSAIntermediateKey;
 
 class RSAPublicKey : public PublicKey {
  public:
@@ -34,7 +36,8 @@ class RSAPublicKey : public PublicKey {
 
   // Creates a key from |root_key|. The caller takes ownership of the returned
   // Key.
-  static RSAPublicKey* CreateFromValue(const Value& root_key);
+  static RSAPublicKey* CreateFromValue(const Value& root_key,
+                                       RSAIntermediateKey* intermediate = NULL);
 
   // The caller takes ownership of the returned Value.
   virtual Value* GetValue() const;
@@ -49,9 +52,19 @@ class RSAPublicKey : public PublicKey {
 
  private:
   friend class RSATest;
+  friend class RSAPrivateKey;
+  FRIEND_TEST(RSATest, OaepIncompatibleWithPkcs);
+  FRIEND_TEST(RSATest, LoadPublicKey);
 
   // The caller doesn't take ownership over the returned object.
   RSAImpl* rsa_impl() const { return rsa_impl_.get(); }
+
+  // Gets the RSA padding mode used by cipher operations.
+  RsaPadding padding() const;
+
+  // Sets the padding mode for encryption operations.  Does *not* also update
+  // the padding mode of the private key.
+  void set_padding(RsaPadding padding);
 
   scoped_ptr<RSAImpl> rsa_impl_;
 

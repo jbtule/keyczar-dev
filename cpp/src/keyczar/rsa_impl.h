@@ -19,34 +19,39 @@
 #include <keyczar/base/basictypes.h>
 #include <keyczar/base/stl_util-inl.h>
 #include <keyczar/message_digest_impl.h>
+#include <keyczar/rsa_padding.h>
 
 namespace keyczar {
+
+// This structure will be used for retrieving in a generic way the values
+// of these fields from the concrete implementations.
+struct RSAIntermediateKey {
+  std::string n;     // public modulus
+  std::string e;     // public exponent
+  std::string d;     // private exponent
+  std::string p;     // secret prime factor
+  std::string q;     // secret prime factor
+  std::string dmp1;  // d mod (p-1
+  std::string dmq1;  // d mod (q-1)
+  std::string iqmp;  // q^-1 mod p
+  RsaPadding padding;
+
+  // Ensure that callers explicity specify padding.
+  RSAIntermediateKey() : padding(UNDEFINED) {}
+
+  ~RSAIntermediateKey() {
+    base::STLStringMemErase(&d);
+    base::STLStringMemErase(&p);
+    base::STLStringMemErase(&q);
+    base::STLStringMemErase(&dmp1);
+    base::STLStringMemErase(&dmq1);
+    base::STLStringMemErase(&iqmp);
+  }
+};
 
 // Cryptographic RSA interface.
 class RSAImpl {
  public:
-  // This structure will be used for retrieving in a generic way the values
-  // of these fields from the concrete implementations.
-  struct RSAIntermediateKey {
-    std::string n;     // public modulus
-    std::string e;     // public exponent
-    std::string d;     // private exponent
-    std::string p;     // secret prime factor
-    std::string q;     // secret prime factor
-    std::string dmp1;  // d mod (p-1
-    std::string dmq1;  // d mod (q-1)
-    std::string iqmp;  // q^-1 mod p
-
-    ~RSAIntermediateKey() {
-      base::STLStringMemErase(&d);
-      base::STLStringMemErase(&p);
-      base::STLStringMemErase(&q);
-      base::STLStringMemErase(&dmp1);
-      base::STLStringMemErase(&dmq1);
-      base::STLStringMemErase(&iqmp);
-    }
-  };
-
   RSAImpl() {}
   virtual ~RSAImpl() {}
 
@@ -77,6 +82,10 @@ class RSAImpl {
 
   // Returns the key size in bits.
   virtual int Size() const = 0;
+
+  virtual RsaPadding padding() const = 0;
+
+  virtual void set_padding(RsaPadding padding) = 0;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(RSAImpl);
